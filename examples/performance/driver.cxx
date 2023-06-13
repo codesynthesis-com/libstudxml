@@ -9,6 +9,9 @@
 
 #include "time.hxx"
 
+#undef NDEBUG
+#include <cassert>
+
 using namespace std;
 using namespace xml;
 
@@ -69,6 +72,8 @@ main (int argc, char* argv[])
           break;
         }
       }
+
+      assert (start_count == end_count);
     }
 
     cerr << "  elements:       " << start_count << endl;
@@ -102,6 +107,8 @@ main (int argc, char* argv[])
           break;
         }
       }
+
+      assert (start_count == end_count);
     }
 
     os::time end;
