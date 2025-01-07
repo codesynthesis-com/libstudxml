@@ -7,6 +7,8 @@
 #ifndef LIBSTUDXML_DETAILS_CONFIG_H
 #define LIBSTUDXML_DETAILS_CONFIG_H
 
+/* Endianess.
+ */
 #ifdef __FreeBSD__
 #  include <sys/endian.h> /* BYTE_ORDER */
 #else

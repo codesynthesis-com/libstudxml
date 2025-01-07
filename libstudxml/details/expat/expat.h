@@ -95,7 +95,9 @@ enum XML_Error {
   /* Added in 2.0. */
   XML_ERROR_RESERVED_PREFIX_XML,
   XML_ERROR_RESERVED_PREFIX_XMLNS,
-  XML_ERROR_RESERVED_NAMESPACE_URI
+  XML_ERROR_RESERVED_NAMESPACE_URI,
+  /* Added in 2.2.1. */
+  XML_ERROR_INVALID_ARGUMENT
 };
 
 enum XML_Content_Type {
@@ -215,6 +217,17 @@ XML_ParserCreate(const XML_Char *encoding);
    and the local part will be concatenated without any separator.
    It is a programming error to use the separator '\0' with namespace
    triplets (see XML_SetReturnNSTriplet).
+   If a namespace separator is chosen that can be part of a URI or
+   part of an XML name, splitting an expanded name back into its
+   1, 2 or 3 original parts on application level in the element handler
+   may end up vulnerable, so these are advised against;  sane choices for
+   a namespace separator are e.g. '\n' (line feed) and '|' (pipe).
+
+   Note that Expat does not validate namespace URIs (beyond encoding)
+   against RFC 3986 today (and is not required to do so with regard to
+   the XML 1.0 namespaces specification) but it may start doing that
+   in future releases.  Before that, an application using Expat must
+   be ready to receive namespace URIs containing non-URI characters.
 */
 XMLPARSEAPI(XML_Parser)
 XML_ParserCreateNS(const XML_Char *encoding, XML_Char namespaceSeparator);
@@ -788,20 +801,20 @@ XML_ParseBuffer(XML_Parser parser, int len, int isFinal);
    (resumable = 0) an already suspended parser. Some call-backs may
    still follow because they would otherwise get lost. Examples:
    - endElementHandler() for empty elements when stopped in
-     startElementHandler(),
-   - endNameSpaceDeclHandler() when stopped in endElementHandler(),
+     startElementHandler(), 
+   - endNameSpaceDeclHandler() when stopped in endElementHandler(), 
    and possibly others.
 
    Can be called from most handlers, including DTD related call-backs,
    except when parsing an external parameter entity and resumable != 0.
    Returns XML_STATUS_OK when successful, XML_STATUS_ERROR otherwise.
-   Possible error codes:
+   Possible error codes: 
    - XML_ERROR_SUSPENDED: when suspending an already suspended parser.
    - XML_ERROR_FINISHED: when the parser has already finished.
    - XML_ERROR_SUSPEND_PE: when suspending while parsing an external PE.
 
-   When resumable != 0 (true) then parsing is suspended, that is,
-   XML_Parse() and XML_ParseBuffer() return XML_STATUS_SUSPENDED.
+   When resumable != 0 (true) then parsing is suspended, that is, 
+   XML_Parse() and XML_ParseBuffer() return XML_STATUS_SUSPENDED. 
    Otherwise, parsing is aborted, that is, XML_Parse() and XML_ParseBuffer()
    return XML_STATUS_ERROR with error code XML_ERROR_ABORTED.
 
@@ -812,7 +825,7 @@ XML_ParseBuffer(XML_Parser parser, int len, int isFinal);
    the externalEntityRefHandler() to call XML_StopParser() on the parent
    parser (recursively), if one wants to stop parsing altogether.
 
-   When suspended, parsing can be resumed by calling XML_ResumeParser().
+   When suspended, parsing can be resumed by calling XML_ResumeParser(). 
 */
 XMLPARSEAPI(enum XML_Status)
 XML_StopParser(XML_Parser parser, XML_Bool resumable);
@@ -820,7 +833,7 @@ XML_StopParser(XML_Parser parser, XML_Bool resumable);
 /* Resumes parsing after it has been suspended with XML_StopParser().
    Must not be called from within a handler call-back. Returns same
    status codes as XML_Parse() or XML_ParseBuffer().
-   Additional error code XML_ERROR_NOT_SUSPENDED possible.
+   Additional error code XML_ERROR_NOT_SUSPENDED possible.   
 
    *Note*:
    This must be called on the most deeply nested child parser instance
@@ -930,7 +943,7 @@ XML_GetErrorCode(XML_Parser parser);
    be within the relevant markup.  When called outside of the callback
    functions, the position indicated will be just past the last parse
    event (regardless of whether there was an associated callback).
-
+   
    They may also be called after returning from a call to XML_Parse
    or XML_ParseBuffer.  If the return value is XML_STATUS_ERROR then
    the location is the location of the character at which the error
