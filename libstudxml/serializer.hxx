@@ -16,7 +16,7 @@
 #include <libstudxml/qname.hxx>
 #include <libstudxml/exception.hxx>
 
-#include <libstudxml/details/config.hxx> // STUDXML_NOTHROW_NOEXCEPT
+#include <libstudxml/details/config.hxx>
 #include <libstudxml/details/export.hxx>
 
 namespace xml
@@ -25,7 +25,7 @@ namespace xml
   {
   public:
     virtual
-    ~serialization () STUDXML_NOTHROW_NOEXCEPT {}
+    ~serialization () noexcept {}
 
     serialization (const std::string& name, const std::string& description);
     serialization (const serializer& s, const std::string& description);
@@ -37,7 +37,7 @@ namespace xml
     description () const {return description_;}
 
     virtual const char*
-    what () const STUDXML_NOTHROW_NOEXCEPT {return what_.c_str ();}
+    what () const noexcept {return what_.c_str ();}
 
   private:
     LIBSTUDXML_EXPORT void

@@ -12,8 +12,7 @@
 #include <iosfwd>
 #include <cstddef> // std::size_t
 
-#include <libstudxml/details/config.hxx> // STUDXML_NOTHROW_NOEXCEPT,
-                                         // LIBSTUDXML_EXTERNAL_EXPAT
+#include <libstudxml/details/config.hxx>
 
 #ifndef LIBSTUDXML_EXTERNAL_EXPAT
 #  include <libstudxml/details/expat/expat.h>
@@ -40,7 +39,7 @@ namespace xml
   {
   public:
     virtual
-    ~parsing () STUDXML_NOTHROW_NOEXCEPT {}
+    ~parsing () noexcept {}
 
     parsing (const std::string& name,
              unsigned long long line,
@@ -62,7 +61,7 @@ namespace xml
     description () const {return description_;}
 
     virtual const char*
-    what () const STUDXML_NOTHROW_NOEXCEPT {return what_.c_str ();}
+    what () const noexcept {return what_.c_str ();}
 
   private:
     LIBSTUDXML_EXPORT void

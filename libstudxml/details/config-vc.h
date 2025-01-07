@@ -7,7 +7,7 @@
 #ifndef LIBSTUDXML_DETAILS_CONFIG_VC_H
 #define LIBSTUDXML_DETAILS_CONFIG_VC_H
 
-// Always little-endian, at least on i686 and x86_64.
+// Always little-endian, at least on i686, x86_64, and ARM.
 //
 #define LIBSTUDXML_BYTEORDER 1234
 
