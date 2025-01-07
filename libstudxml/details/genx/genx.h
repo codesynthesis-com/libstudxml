@@ -14,6 +14,10 @@
 
 #include <stddef.h> /* size_t */
 
+/*#include <libgenx/export.h>*/
+
+#define LIBGENX_SYMEXPORT
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -86,17 +90,20 @@ typedef void (*genxDealloc) (void * userData, void* data);
  *  one document at a time with a writer.
  * Returns NULL if it fails, which can only be due to an allocation failure.
  */
+LIBGENX_SYMEXPORT
 genxWriter genxNew(genxAlloc alloc, genxDealloc dealloc, void * userData);
 
 /*
  * Reset the writer object back into usable state after an error or
  * interruption.
  */
+LIBGENX_SYMEXPORT
 genxStatus genxReset (genxWriter w);
 
 /*
  * Dispose of a writer, freeing all associated memory
  */
+LIBGENX_SYMEXPORT
 void genxDispose(genxWriter w);
 
 /*
@@ -107,14 +114,20 @@ void genxDispose(genxWriter w);
  * The userdata pointer will be passed to memory-allocation
  *  and I/O callbacks. If not set, genx will pass NULL
  */
+LIBGENX_SYMEXPORT
 void genxSetUserData(genxWriter w, void * userData);
+
+LIBGENX_SYMEXPORT
 void * genxGetUserData(genxWriter w);
 
 /*
  * Set/get pretty-printing. If indentation is set to 0, then no pretty-
  * printing is performed.
  */
+LIBGENX_SYMEXPORT
 genxStatus genxSetPrettyPrint(genxWriter w, int indentation);
+
+LIBGENX_SYMEXPORT
 int genxGetPrettyPrint(genxWriter w);
 
 /*
@@ -130,8 +143,13 @@ int genxGetPrettyPrint(genxWriter w);
  * level at which pretty-printing was suspended, with root element
  * being level 1.
  */
+LIBGENX_SYMEXPORT
 genxStatus genxSuspendPrettyPrint(genxWriter w);
+
+LIBGENX_SYMEXPORT
 genxStatus genxResumePrettyPrint(genxWriter w);
+
+LIBGENX_SYMEXPORT
 int genxPrettyPrintSuspended(genxWriter w);
 
 
@@ -139,7 +157,10 @@ int genxPrettyPrintSuspended(genxWriter w);
  * Set/get canonicalization. If true, then output explicit closing
  * tags and sort attributes. Default is false.
  */
+LIBGENX_SYMEXPORT
 genxStatus genxSetCanonical(genxWriter w, int flag);
+
+LIBGENX_SYMEXPORT
 int genxGetCanonical(genxWriter w);
 
 /*
@@ -151,15 +172,23 @@ int genxGetCanonical(genxWriter w);
  *  the memory; this would be appropriate in an Apache context.
  * If "alloc" is not provided, genx routines use malloc() to allocate memory
  */
+LIBGENX_SYMEXPORT
 void genxSetAlloc(genxWriter w, genxAlloc alloc);
+
+LIBGENX_SYMEXPORT
 void genxSetDealloc(genxWriter w, genxDealloc dealloc);
+
+LIBGENX_SYMEXPORT
 genxAlloc genxGetAlloc(genxWriter w);
+
+LIBGENX_SYMEXPORT
 genxDealloc genxGetDealloc(genxWriter w);
 
 /*
  * Get the prefix associated with a namespace
  */
-utf8 genxGetNamespacePrefix(genxNamespace ns);
+LIBGENX_SYMEXPORT
+constUtf8 genxGetNamespacePrefix(genxNamespace ns);
 
 /*
  * Declaration functions
@@ -171,6 +200,7 @@ utf8 genxGetNamespacePrefix(genxNamespace ns);
  *  genx will generate one of the form g-%d.
  * On error, returns NULL and signals via statusp
  */
+LIBGENX_SYMEXPORT
 genxNamespace genxDeclareNamespace(genxWriter w,
 				   constUtf8 uri, constUtf8 prefix,
 				   genxStatus * statusP);
@@ -179,6 +209,7 @@ genxNamespace genxDeclareNamespace(genxWriter w,
  * Declare an element
  * If something failed, returns NULL and sets the status code via statusP
  */
+LIBGENX_SYMEXPORT
 genxElement genxDeclareElement(genxWriter w,
 			       genxNamespace ns, constUtf8 name,
 			       genxStatus * statusP);
@@ -186,6 +217,7 @@ genxElement genxDeclareElement(genxWriter w,
 /*
  * Declare an attribute
  */
+LIBGENX_SYMEXPORT
 genxAttribute genxDeclareAttribute(genxWriter w,
 				   genxNamespace ns,
 				   constUtf8 name, genxStatus * statusP);
@@ -207,17 +239,20 @@ typedef struct
   genxStatus (* flush)(void * userData);
 } genxSender;
 
-genxStatus genxStartDocSender(genxWriter w, genxSender * sender);
+LIBGENX_SYMEXPORT
+genxStatus genxStartDocSender(genxWriter w, const genxSender * sender);
 
 /*
  * End a document.  Calls "flush".
  */
+LIBGENX_SYMEXPORT
 genxStatus genxEndDocument(genxWriter w);
 
 /*
  * Write XML declaration. If encoding or standalone are NULL, then those
  * attributes are omitted.
  */
+LIBGENX_SYMEXPORT
 genxStatus genxXmlDeclaration(genxWriter w,
                               constUtf8 version,
                               constUtf8 encoding,
@@ -229,6 +264,7 @@ genxStatus genxXmlDeclaration(genxWriter w,
  * that only contains the root element and, if not NULL, internal
  * subset is written.
  */
+LIBGENX_SYMEXPORT
 genxStatus genxDoctypeDeclaration(genxWriter w,
                                   constUtf8 root_element,
                                   constUtf8 public_id,
@@ -238,16 +274,19 @@ genxStatus genxDoctypeDeclaration(genxWriter w,
 /*
  * Write a comment
  */
+LIBGENX_SYMEXPORT
 genxStatus genxComment(genxWriter w, constUtf8 text);
 
 /*
  * Write a PI
  */
+LIBGENX_SYMEXPORT
 genxStatus genxPI(genxWriter w, constUtf8 target, constUtf8 text);
 
 /*
  * Start an element
  */
+LIBGENX_SYMEXPORT
 genxStatus genxStartElementLiteral(genxWriter w,
 				   constUtf8 xmlns, constUtf8 name);
 
@@ -255,6 +294,7 @@ genxStatus genxStartElementLiteral(genxWriter w,
  * Start a predeclared element
  * - element must have been declared
  */
+LIBGENX_SYMEXPORT
 genxStatus genxStartElement(genxElement e);
 
 /*
@@ -262,29 +302,34 @@ genxStatus genxStartElement(genxElement e);
  * element ceases to be current (i.e., EndElement() is called).
  * If the element is unqualified, then xmlns is set to NULL.
  */
+LIBGENX_SYMEXPORT
 genxStatus genxGetCurrentElement (genxWriter w,
                                   constUtf8* xmlns, constUtf8* name);
 
 /*
  * Write an attribute
  */
+LIBGENX_SYMEXPORT
 genxStatus genxAddAttributeLiteral(genxWriter w, constUtf8 xmlns,
 				   constUtf8 name, constUtf8 value);
 
 /*
  * Write a predeclared attribute
  */
+LIBGENX_SYMEXPORT
 genxStatus genxAddAttribute(genxAttribute a, constUtf8 value);
 
 /*
  * Start an attribute
  */
+LIBGENX_SYMEXPORT
 genxStatus genxStartAttributeLiteral(genxWriter w,
                                      constUtf8 xmlns, constUtf8 name);
 
 /*
  * Start a predeclared attribute
  */
+LIBGENX_SYMEXPORT
 genxStatus genxStartAttribute(genxAttribute a);
 
 /*
@@ -292,33 +337,39 @@ genxStatus genxStartAttribute(genxAttribute a);
  * attribute ceases to be current (i.e., EndAttribute() is called).
  * If the attribute is unqualified, then xmlns is set to NULL.
  */
+LIBGENX_SYMEXPORT
 genxStatus genxGetCurrentAttribute (genxWriter w,
                                     constUtf8* xmlns, constUtf8* name);
 
 /*
  * End an attribute
  */
+LIBGENX_SYMEXPORT
 genxStatus genxEndAttribute(genxWriter w);
 
 /*
  * add a namespace declaration
  */
+LIBGENX_SYMEXPORT
 genxStatus genxAddNamespaceLiteral(genxWriter w,
                                    constUtf8 uri, constUtf8 prefix);
 
 /*
  * add a predefined namespace declaration
  */
+LIBGENX_SYMEXPORT
 genxStatus genxAddNamespace(genxNamespace ns, constUtf8 prefix);
 
 /*
  * Clear default namespace declaration
  */
+LIBGENX_SYMEXPORT
 genxStatus genxUnsetDefaultNamespace(genxWriter w);
 
 /*
  * Write an end tag
  */
+LIBGENX_SYMEXPORT
 genxStatus genxEndElement(genxWriter w);
 
 /*
@@ -326,14 +377,20 @@ genxStatus genxEndElement(genxWriter w);
  * You can't write any text outside the root element, except with
  * genxComment and genxPI.
  */
+LIBGENX_SYMEXPORT
 genxStatus genxAddText(genxWriter w, constUtf8 start);
+
+LIBGENX_SYMEXPORT
 genxStatus genxAddCountedText(genxWriter w, constUtf8 start, size_t byteCount);
+
+LIBGENX_SYMEXPORT
 genxStatus genxAddBoundedText(genxWriter w, constUtf8 start, constUtf8 end);
 
 /*
  * Write one character.  The integer value is the Unicode character
  *  value, as usually expressed in U+XXXX notation.
  */
+LIBGENX_SYMEXPORT
 genxStatus genxAddCharacter(genxWriter w, int c);
 
 /*
@@ -347,18 +404,21 @@ genxStatus genxAddCharacter(genxWriter w, int c);
  *  argument to point at the first byte past the point past the malformed
  *  ones.
  */
+LIBGENX_SYMEXPORT
 int genxNextUnicodeChar(constUtf8 * sp);
 
 /*
  * Scan a buffer allegedly full of UTF-8 encoded XML characters; return
  *  one of GENX_SUCCESS, GENX_BAD_UTF8, or GENX_NON_XML_CHARACTER
  */
+LIBGENX_SYMEXPORT
 genxStatus genxCheckText(genxWriter w, constUtf8 s);
 
 /*
  * return character status, the OR of GENX_XML_CHAR,
  *  GENX_LETTER, and GENX_NAMECHAR
  */
+LIBGENX_SYMEXPORT
 int genxCharClass(genxWriter w, int c);
 
 /*
@@ -370,18 +430,23 @@ int genxCharClass(genxWriter w, int c);
  * The output can never be longer than the input.
  * Returns true if any changes were made.
  */
+LIBGENX_SYMEXPORT
 int genxScrubText(genxWriter w, constUtf8 in, utf8 out);
 
 /*
  * return error messages
  */
-char * genxGetErrorMessage(genxWriter w, genxStatus status);
-char * genxLastErrorMessage(genxWriter w);
+LIBGENX_SYMEXPORT
+const char * genxGetErrorMessage(genxWriter w, genxStatus status);
+
+LIBGENX_SYMEXPORT
+const char * genxLastErrorMessage(genxWriter w);
 
 /*
  * return version
  */
-char * genxGetVersion();
+LIBGENX_SYMEXPORT
+const char * genxGetVersion();
 
 #ifdef __cplusplus
 }

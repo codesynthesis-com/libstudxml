@@ -5,8 +5,6 @@
  * For copying permission, see the accompanying LICENSE file.
  */
 
-#define GENX_VERSION "cs-1"
-
 /* Use snprintf() unless instructed otherwise. */
 #ifndef GENX_SNPRINTF
 #  define GENX_SNPRINTF 1
@@ -21,6 +19,9 @@
 #include <string.h>
 
 #include <libstudxml/details/genx/genx.h>
+/*#include <libgenx/version.h>*/
+
+#define LIBGENX_VERSION_STR "0.2.0"
 
 #define Boolean int
 #define True 1
@@ -116,7 +117,7 @@ struct genxAttribute_rec
  */
 struct genxWriter_rec
 {
-  genxSender *    	   sender;
+  const genxSender *       sender;
   genxStatus   	  	   status;
   writerSequence  	   sequence;
   char            	   xmlChars[GENX_CHAR_TABLE_SIZE];
@@ -966,11 +967,11 @@ static genxStatus checkNCName(genxWriter w, constUtf8 name)
   return GENX_SUCCESS;
 }
 
-char * genxGetErrorMessage(genxWriter w, genxStatus status)
+const char * genxGetErrorMessage(genxWriter w, genxStatus status)
 {
   return w->etext[status];
 }
-char * genxLastErrorMessage(genxWriter w)
+const char * genxLastErrorMessage(genxWriter w)
 {
   return w->etext[w->status];
 }
@@ -1092,7 +1093,7 @@ busted:
 /*
  * get namespace prefix
  */
-utf8 genxGetNamespacePrefix(genxNamespace ns)
+constUtf8 genxGetNamespacePrefix(genxNamespace ns)
 {
   if (ns->declaration == NULL)
     return NULL;
@@ -1305,7 +1306,7 @@ static genxStatus sendxBounded(genxWriter w, constUtf8 start, constUtf8 end)
  *  for internal routines.
  */
 
-genxStatus genxStartDocSender(genxWriter w, genxSender * sender)
+genxStatus genxStartDocSender(genxWriter w, const genxSender * sender)
 {
   if (w->sequence != SEQUENCE_NO_DOC)
     return w->status = GENX_SEQUENCE_ERROR;
@@ -2537,7 +2538,7 @@ genxStatus genxAddNamespaceLiteral(genxWriter w,
 /*
  * return version
  */
-char * genxGetVersion()
+const char * genxGetVersion()
 {
-  return GENX_VERSION;
+  return LIBGENX_VERSION_STR;
 }
