@@ -4,3 +4,13 @@ $ bpkg build libstudxml
 
 But if you don't want to use the package manager, then you can also build it
 manually using the standard build2 build system.
+
+On Linux, an alternative CMake build uses system Expat (2.1 or later) and
+requires a C++11 compiler:
+
+$ cmake -S . -B cmake-build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
+$ cmake --build cmake-build
+$ cmake --install cmake-build
+
+This builds a shared library with the private Genx implementation and
+installs headers and libstudxml.pc for pkg-config consumers.

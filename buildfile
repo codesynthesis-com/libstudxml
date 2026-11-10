@@ -1,7 +1,8 @@
 # file      : buildfile
 # license   : MIT; see accompanying LICENSE file
 
-./: {*/ -build/} doc{INSTALL NEWS README} legal{LICENSE} manifest
+./: {*/ -build/} doc{INSTALL NEWS README} legal{LICENSE} manifest \
+    file{CMakeLists.txt libstudxml.pc.in}
 
 # Don't install examples, tests or the INSTALL file.
 #
