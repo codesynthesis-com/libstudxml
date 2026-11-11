@@ -1,0 +1,11 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=${prefix}
+libdir=@CMAKE_INSTALL_FULL_LIBDIR@
+includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+
+Name: libstudxml
+Description: Streaming XML pull parser and serializer for C++
+Version: @PROJECT_VERSION@
+Requires: expat >= 2.1.0
+Libs: -L${libdir} -lstudxml
+Cflags: -I${includedir} -DLIBSTUDXML_EXTERNAL_EXPAT -DLIBSTUDXML_SHARED
